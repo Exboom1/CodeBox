@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Download Orbital</title>
+</head>
+<body>
+    <h1>Downloading...</h1>
+    <p>Your download is starting now. You will be redirected shortly.</p>
+    <a id="download-link" href="orbital.html" download="CodeBox Orbital.html" style="display:none;"></a>
+
+    <script>
+        window.onload = function() {
+            // Get the hidden download link
+            var downloadLink = document.getElementById('download-link');
+            
+            // Programmatically click the link to trigger the download
+            downloadLink.click();
+        };
+    </script>
+</body>
+</html>
