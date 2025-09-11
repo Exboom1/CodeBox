@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      background-image: url("https://st.depositphotos.com/1007879/60605/i/450/depositphotos_606055568-stock-photo-360-degree-space-background-nebula.jpg");
+    }
+
+    nav button {
+      background-color: #0f0f0f;
+      color: #FFFFFF;
+      padding: 10%;
+      font-family: cursive;
+      text-align: center;
+      position: absolute;
+      top: 30%;
+    }
+
+    nav button:hover {
+      background-color: #000000;
+      transition: all 50ms;
+      scale: 125%;
+    }
+
+    header {
+      position: fixed;
+      background-color: #0f0f0f;
+      background-image: url("https://www.energy.gov/sites/default/files/styles/full_article_width/public/2024-07/doe-explains-cosmology.jpg?itok=GveVx9BC");
+      padding: 15px;
+      border: 1px solid #FF0000;
+      color: white;
+      border-radius: 8px;
+      display: inline-block;
+      width: 98%;
+      text-align: center;
+    }
+
+    form {
+      background-color: #FFFFFF;
+      color: lime;
+      background-image: url("https://img.freepik.com/free-vector/matrix-style-binary-code-digital-background-with-falling-numbers_1017-25336.jpg");
+      position: absolute;
+      top: 30%;
+      left: 38%;
+      padding: 5%;
+      scale: 100%;
+    }
+
+    select {
+      background-color: green;
+      border-radius: 2%;
+    }
+
+    form button {
+      background-color: green;
+      border-radius: 2%;
+    }
+  </style>
+  <link rel="icon" class="icon" type="image/x-icon"
+    href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7bf5QcQp30OGA_UdqGUilQEp61YlkrnKQCg&s">
+  <title>CodeBox Orbital</title>
+</head>
+
+<body>
+  <header>
+    <h1>GameBox Orbital</h1>
+    <h2>The place for all of your games</h2>
+  </header>
+  <nav>
+    <button id="add">Add New</button>
+    <button id="theSel">Choose Theme</button>
+  </nav>
+
+  <form id="addF">
+    <fieldset>
+      <legend>Select what to add:</legend>
+      <label for="game">
+        <input type="radio" id="game" name="type" value="game" required> Game
+      </label><br>
+      <label for="theme">
+        <input type="radio" id="theme" name="type" value="theme"> Theme
+      </label><br>
+    </fieldset>
+    <p>Enter game/theme name here!</p><input type="text" id="name" placeholder="Example game" required>
+    <br>
+    <p>Enter game/theme URL here!</p><input type="text" id="url" placeholder="https://example/site.com" required>
+    <hr>
+    <button type="submit" id="submit">Add!</button>
+  </form>
+
+  <form id="themeF">
+    <fieldset id="theOpt">
+      <legend>Select your theme:</legend>
+      <input type="radio" name="theme" id="default" value="default"> Default
+      <br>
+    </fieldset>
+    <button type="submit">Select</button>
+    <select id="del" name="del">
+      <option value="off" selected>Select this theme</option>
+      <option value="on">Delete this theme</option>
+    </select>
+  </form>
+
+  <audio id="lava-chicken-audio"
+    src="https://static.wikia.nocookie.net/international-entertainment-project/images/e/ee/A_Minecraft_Movie_-_Steve%27s_Lava_Chicken_%28English%29.mp3/revision/latest?cb=20250418230018"
+    loop muted></audio>
+
+  <iframe
+    style="position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
+  </iframe>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    //////////-----GENERIC-----\\\\\\\\\\
+    //save/load
+    function save(key, value, daysToExpire) {
+      if (typeof (localStorage) !== "undefined") { // Check if localStorage is supported
+        try {
+          localStorage.setItem(key, JSON.stringify(value)); // Store as JSON string
+          console.log(`Saved ${key} to localStorage`);
+          return;
+        } catch (e) {
+          console.warn("localStorage quota exceeded or error occurred, falling back to cookies:", e); // Fallback if quota exceeded or error occurs
+        }
+      }
+
+      // Fallback to cookies if localStorage isn't available or fails
+      setCookie(key, JSON.stringify(value), daysToExpire);
+      console.log(`Saved ${key} as cookie`);
+    }
+
+    function load(key) {
+      if (typeof (localStorage) !== "undefined") { // Check if localStorage is supported
+        try {
+          const data = localStorage.getItem(key);
+          if (data) {
+            console.log(`Loaded ${key} from localStorage`);
+            return JSON.parse(data); // Parse the JSON string
+          }
+        } catch (e) {
+          console.warn("Error loading from localStorage, falling back to cookies:", e);
+        }
+      }
+
+      // Fallback to cookies if localStorage isn't available or fails
+      const cookieData = getCookie(key);
+      if (cookieData) {
+        console.log(`Loaded ${key} from cookie`);
+        return JSON.parse(cookieData); // Parse the JSON string
+      }
+
+      return null; // Return null if nothing is found
+    }
+
+    // Helper function to set a cookie
+    function setCookie(name, value, days) {
+      const d = new Date();
+      d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+      const expires = "expires=" + d.toUTCString();
+      document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    // Helper function to get a cookie
+    function getCookie(name) {
+      const cname = name + "=";
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const ca = decodedCookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(cname) === 0) {
+          return c.substring(cname.length, c.length);
+        }
+      }
+      return "";
+    }
+    //////////-----GAMES-----\\\\\\\\\\
+    $("iframe").hide();
+    $("form").hide();
+    let games = load("games");
+    if (games == null) {
+      games = [];
+    }
+    console.log(games);
+
+    reloadGames();
+    //RELOAD
+    function reloadGames() {
+      save("games", games, 9999999999);
+      var per = 400;
+      $('nav').html("<button id='add'>Add New</button><button id='theSel' style='left:400px'>Choose Theme</button>");
+      for (let i = 0; i < games.length; i++) {
+        let button = `<button id="${i}">${games[i].name}</button>`;
+        $('nav').append(button);
+        $("#" + i).css('left', per * i + per * 2 + "px");
+      }
+      return;
+    };
+    //////////-----THEMES-----\\\\\\\\\\
+    let themes = load("themes");
+    if (themes == null) {
+      themes = [];
+    }
+    console.log(themes);
+
+    // Load and apply saved theme on startup
+    let savedTheme = load("selectedTheme");
+    console.log(savedTheme);
+    let currentTheme = savedTheme ? savedTheme : "default";
+    applyTheme(currentTheme);
+    if (currentTheme.includes("LavaChicken.css")) {
+      currentTheme = "default";
+      save("selectedTheme", "default", 9999999999);
+      console.log("LavaChicken theme detected. Resetting to default.");
+      applyTheme("currentTheme");
+    }
+
+    function applyTheme(themeUrl) {
+      $("head link[rel='stylesheet'].theme").remove();
+      const lavaChickenAudio = $('#lava-chicken-audio')[0];
+
+      if (themeUrl !== "default") {
+        $("head").append(`<link rel="stylesheet" class="theme" type="text/css" href="${themeUrl}">`);
+      }
+
+      // Check if the theme URL contains "LavaChicken"
+      if (themeUrl.includes("LavaChicken.css")) {
+        console.log("Lava Chicken theme active. Playing audio.");
+        lavaChickenAudio.play();
+      } else {
+        console.log("Lava Chicken theme not active. Pausing audio.");
+        lavaChickenAudio.pause();
+        lavaChickenAudio.currentTime = 0; // Rewind to the start
+      }
+    }
+
+    function reloadThemes() {
+      save("themes", themes, 9999999999);
+      $("#theOpt").empty(); // Clear existing options
+      $("#theOpt").html('<legend>Select your theme:</legend><input type="radio" name="theme" id="default" value="default"> Default<br>');
+    }
+
+    //////////-----EVENTS-----\\\\\\\\\\
+    $("nav").on("click", "button", function () {
+      //game buttons
+      let id = $(this).attr("id");
+      if (id != "add" && id != "theSel") {
+        $(this).css("background-color", "#00FF00");
+        console.log("Opening game with ID: " + id);
+        setTimeout(function () {
+          $("iframe").show();
+          $("iframe").attr("src", games[id].url);
+          reloadGames();
+        }, 100);
+      }
+      //add button
+      if (id == "add") {
+        $("#addF").show();
+        $("nav").hide();
+      }
+      //Theme button
+      if (id == "theSel") {
+        $("#themeF").show();
+        for (let i = 0; i < themes.length; i++) {
+          $("#theOpt").append(`<label for='theme${i}'><input type='radio' id='theme${i}' name='theme' value='${i}' required> ${themes[i].name}</label><br>`);
+        }
+        $("nav").hide();
+      }
+    });
+
+    $("nav").on("contextmenu", "button", function () {
+      let id = $(this).attr("id");
+      if (id != "add" && id != "theSel") {
+        console.log("Deleting button with ID: " + id);
+        $(this).css("background-color", "#FF0000");
+        setTimeout(function () {
+          games.splice(id, 1);
+          reloadGames();
+        }, 100);
+      }
+    });
+
+    $("#addF").submit(function (e) {
+      event.preventDefault();
+      let type = $('input[name="type"]:checked').val();
+      console.log("Type serialized as: " + type);
+      var nameVal = $('#name').val();
+      console.log("Name serialized as: " + nameVal);
+      var urlVal = $('#url').val();
+      console.log("URL serialized as: " + urlVal);
+      if (type == "game") {
+        games.push({name: nameVal, url: urlVal});
+        console.log(games);
+        reloadGames();
+      }
+      if (type == "theme") {
+        themes.push({name: nameVal, url: urlVal});
+        console.log(themes);
+        reloadThemes();
+      }
+      $("form").hide();
+      $("nav").show();
+    });
+    $("#themeF").submit(function (e) {
+      event.preventDefault();
+      // Use a variable name that clearly indicates it's an index
+      let selIndex = $("input[name='theme']:checked").val();
+      console.log("Theme selector serialized as: " + selIndex);
+      let del = $("#del").val();
+      console.log("DELETE?: " + del);
+
+      if (del === "off") { // Use strict equality (===) for comparison
+        let selectedThemeUrl = "default";
+        if (selIndex !== "default") {
+          selectedThemeUrl = themes[selIndex].url;
+        }
+
+        applyTheme(selectedThemeUrl);
+        save("selectedTheme", selectedThemeUrl, 9999999999);
+
+      } else {
+        // Correctly use the index to remove the theme
+        if (selIndex !== "default") {
+          themes.splice(selIndex, 1);
+        }
+        // Remove the current stylesheet
+        applyTheme("default");
+        save("selectedTheme", "default", 9999999999);
+      }
+
+      $("form").hide();
+      $("nav").show();
+      reloadThemes();
+    });
+
+
+    $(document).on("keydown", function (e) {
+      if (e.key === "Escape") {
+        reloadThemes();
+        console.log('Escape key pressed'); // Debugging line
+        // Only run if the iframe is currently visible
+        if ($("form").is(":visible")) {
+          $("form").hide();
+          $("nav").show();
+        }
+        if ($("iframe").is(":visible")) {
+          $("iframe").hide();
+          $("iframe").attr("src", ""); // Clear the iframe's source
+          $("nav").show(); // Show the navigation buttons again
+        }
+      }
+    });
+
+    // Event listener to unmute audio after first user interaction
+    $(document).one("click", function () {
+      const lavaChickenAudio = $('#lava-chicken-audio')[0];
+      if (lavaChickenAudio.muted) {
+        lavaChickenAudio.muted = false;
+      }
+    });
+
+  </script>
+
+</body>
+
+</html>
