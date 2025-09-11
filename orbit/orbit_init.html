@@ -15,15 +15,6 @@
             
             // Programmatically click the link to trigger the download
             downloadLink.click();
-
-            // Open a new page in the current window after a short delay
-            // A 500ms delay helps ensure the download is initiated first
-            setTimeout(function() {
-                // IMPORTANT: This will navigate the user away from the current page.
-                // If the downloaded file was on a live server, you could open it
-                // by replacing 'downloaded.html' with its live URL.
-                window.location.href = "downloaded.html";
-            }, 100);
         };
     </script>
 </body>
