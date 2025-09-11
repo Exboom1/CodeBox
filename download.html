@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instant Download</title>
+</head>
+<body>
+    <h1>Downloading...</h1>
+    <p>Your download is starting now. You will be redirected shortly.</p>
+    <a id="download-link" href="index.html" download="CodeBox Main.html" style="display:none;"></a>
+
+    <script>
+        window.onload = function() {
+            // Get the hidden download link
+            var downloadLink = document.getElementById('download-link');
+            
+            // Programmatically click the link to trigger the download
+            downloadLink.click();
+
+            // Open a new page in the current window after a short delay
+            // A 500ms delay helps ensure the download is initiated first
+            setTimeout(function() {
+                // IMPORTANT: This will navigate the user away from the current page.
+                // If the downloaded file was on a live server, you could open it
+                // by replacing 'downloaded.html' with its live URL.
+                window.location.href = "index.html";
+            }, 500);
+        };
+    </script>
+</body>
+</html>
